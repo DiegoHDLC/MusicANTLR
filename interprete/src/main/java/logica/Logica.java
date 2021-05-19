@@ -2,18 +2,21 @@ package logica;
 
 import javax.xml.stream.util.EventReaderDelegate;
 
+import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
 public class Logica {
 	Object tempo;
 	Object octava;
 	Object alteracion;
+	Object instrumento;
 	
-	public Logica(Object tempo, Object octava, Object alteracion)
+	public Logica(Object tempo, Object octava, Object alteracion, Object instrumento)
 	{
 		this.tempo = tempo;
 		this.octava = octava;
 		this.alteracion = alteracion;
+		this.instrumento = instrumento;
 	}
 	
 	public Object getTempo() {
@@ -38,7 +41,16 @@ public class Logica {
 	public void setAlteracion(Object alteracion) {
 		this.alteracion = alteracion;
 	}
+	public Object getInstrumento() {
+		return instrumento;
+	}
+	
+	public void setInstrumento(Object instrumento) {
+		this.instrumento = instrumento;
+	}
+	
 	public void testeo(Object notaExtraida, Object nombreFig) {
+		Pattern pattern = new Pattern();
 		
 		Player player = new Player();
 		
@@ -46,13 +58,12 @@ public class Logica {
 		//System.out.println(t);
 		Object tiempoNota = determinarTiempo(nombreFig, t);
 		Object notaFinal = determinarNota(notaExtraida);
-	
 		Object octavaFinal = determinarOctava(this.getOctava());
 		Object alteracionFinal = determinarAlteracion(this.getAlteracion());
-		
+		Object instrumentoFinal = determinarInstrumento(this.getInstrumento());
 		System.out.println(alteracionFinal);
 		//System.out.println(octavaFinal);
-		NotasMusicales nota = new NotasMusicales(player, notaFinal.toString()+alteracionFinal+octavaFinal+"/" + tiempoNota);
+		NotasMusicales nota = new NotasMusicales(player,"I["+this.getInstrumento().toString()+"] "+notaFinal.toString()+alteracionFinal+octavaFinal+"/" + tiempoNota);
 		nota.start();
 		float test = Float.parseFloat(tiempoNota.toString());
 		float test1 = test*1000;
@@ -66,6 +77,11 @@ public class Logica {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private Object determinarInstrumento(Object instrumento2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private Object determinarAlteracion(Object alteracion) {

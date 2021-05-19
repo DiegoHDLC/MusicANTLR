@@ -9,14 +9,19 @@ grammar Simple;
 }
 @parser::members{
 	Map<String, Object> symbolTable = new HashMap<String, Object>();
-	Logica logica = new Logica(0,"","");
+	Logica logica = new Logica(0,"","","");
 }
-program returns [Object tv]:
+program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 
 	tv1 = tempoValor{
 		$tv = $tv1.tv;
 		logica.setTempo($tv);
-	} 
+	}
+	INS SEMICOLON 
+	ins1 = instru{
+		$ins = $ins1.ins;
+		logica.setInstrumento($ins);
+	}
 	partitura 
 	;
 	
@@ -69,15 +74,28 @@ alteracion returns [Object alt]:
 	ALTERACION{
 		$alt = $ALTERACION.text;
 	};
+
+instru returns [Object ins]:
+	INSTRUMENTO{
+		$ins = $INSTRUMENTO.text;
+	};
+
 	
 
 
-PROGRAM: 'program';	
+PROGRAM: 'program';
+INS: 'instrumento';
+INSTRUMENTO: 
+/*Viento*/ 'FLUTE'
+/*Guitarras */|'GUITAR'|'ELECTRIC_CLEAN_GUITAR'
+/*Bajos */ |'SLAP_BASS_1'|'ACOUSTIC_BASS'
+/*Pianos */ |'PIANO'|
+;
+TEMPO: 'tempo';
 PARTITURA: 'partitura';
 NOMBRE_FIG: 'redonda'|'blanca'|'negra'|'corchea'|'semicorchea'|'fusa'|'semifusa';
-TEMPO: 'tempo';
 TEMPO_VALOR: '60'|'120'|'180'|'360'|'520'; 
-OCTAVA: [1-8];
+OCTAVA: [0-8];
 ALTERACION: '#'|'b';
 NULO: '-';
 
