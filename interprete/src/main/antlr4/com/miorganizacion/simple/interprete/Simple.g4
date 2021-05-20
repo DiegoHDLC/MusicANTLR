@@ -2,14 +2,13 @@ grammar Simple;
 
 
 @parser::header{
-	import java.util.Map;
-	import java.util.HashMap;
 	import logica.*;
+	import controlador.*;
 	
 }
 @parser::members{
-	Map<String, Object> symbolTable = new HashMap<String, Object>();
-	Logica logica = new Logica(0,"","","");
+	Logica logica = new Logica(0,"","","",null,"");
+	Coordinador coordinador = new Coordinador();
 }
 program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 
@@ -86,10 +85,13 @@ instru returns [Object ins]:
 PROGRAM: 'program';
 INS: 'instrumento';
 INSTRUMENTO: 
-/*Viento*/ 'FLUTE'
+/*Viento*/ 'FLUTE'|'OCARINA'
 /*Guitarras */|'GUITAR'|'ELECTRIC_CLEAN_GUITAR'
 /*Bajos */ |'SLAP_BASS_1'|'ACOUSTIC_BASS'
-/*Pianos */ |'PIANO'|
+/*Pianos */ |'PIANO'
+/*Efectos */|'RAIN'|'APPLAUSE'|'GUNSHOT'
+/*Percusion */|'XYLOPHONE'
+/*Organo */ | 'HARMONICA'
 ;
 TEMPO: 'tempo';
 PARTITURA: 'partitura';

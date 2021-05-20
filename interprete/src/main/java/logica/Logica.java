@@ -1,24 +1,59 @@
 package logica;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.StyledDocument;
 import javax.xml.stream.util.EventReaderDelegate;
 
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
+
+import com.miorganizacion.simple.interprete.SimpleCustomVisitor;
+import com.miorganizacion.simple.interprete.SimpleLexer;
+import com.miorganizacion.simple.interprete.SimpleParser;
+
+import controlador.Coordinador;
 
 public class Logica {
 	Object tempo;
 	Object octava;
 	Object alteracion;
 	Object instrumento;
+	String[] args;
+	String path;
+	Coordinador coordinador;
+	private static final String EXTENSION = "smp";
 	
-	public Logica(Object tempo, Object octava, Object alteracion, Object instrumento)
+	public Logica(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path)
 	{
 		this.tempo = tempo;
 		this.octava = octava;
 		this.alteracion = alteracion;
 		this.instrumento = instrumento;
+		this.args = args;
+		this.path = path;
+		
+	}
+	public String getPath() {
+		return path;
 	}
 	
+	public void setPath(String path) {
+		this.path = path;
+	}
 	public Object getTempo() {
 		return tempo;
 	}
@@ -27,10 +62,17 @@ public class Logica {
 		this.tempo = tempo;
 	}
 	
+	public String[] getArgs() {
+		return args;
+	}
+	
+	public void setArgs(String[] args) {
+		this.args = args;
+	}
+	
 	public Object getOctava() {
 		return octava;
 	}
-	
 	public void setOctava(Object octava) {
 		this.octava = octava;
 	}
@@ -154,5 +196,79 @@ public class Logica {
 				
 			}
 		return negra;
+	}
+
+	public void setCoordinador(Coordinador coordinador) {
+		this.coordinador = coordinador;
+		
+	}
+
+	public void play() throws IOException {
+		
+		String program = args.length > 1 ? args[1] : "test/test." + EXTENSION;
+		System.out.println("Interpreting file " + program);
+
+		SimpleLexer lexer = new SimpleLexer(new ANTLRFileStream(program));
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		SimpleParser parser = new SimpleParser(tokens);
+
+		SimpleParser.ProgramContext tree = parser.program();
+
+		SimpleCustomVisitor visitor = new SimpleCustomVisitor();
+		visitor.visit(tree);
+		
+	}
+
+	public void leerArchivo(JPanel contentPane, JTextPane textPane ) {
+		JFileChooser jf = new JFileChooser();
+		jf.showOpenDialog(contentPane);
+		File archivo = jf.getSelectedFile();
+		String path = archivo.getAbsolutePath();
+		textPane.setText("");
+		this.setPath(path);
+		try {
+			BufferedReader leer = new BufferedReader(new FileReader(archivo));
+			String linea = leer.readLine();
+			StyledDocument doc = textPane.getStyledDocument();
+			while(linea!=null) {
+				doc.insertString(doc.getLength(), linea+"\n", null);
+				linea = leer.readLine();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(path);
+		
+	}
+	public void crearArchivo(String[] lines, String path) {
+		 FileWriter fichero = null;
+	        PrintWriter pw = null;
+	        try
+	        {
+	            fichero = new FileWriter(path);
+	            pw = new PrintWriter(fichero);
+
+	            for (int i = 0; i < lines.length; i++)
+	            	pw.println(lines[i]);
+	                
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	           try {
+	           // Nuevamente aprovechamos el finally para 
+	           // asegurarnos que se cierra el fichero.
+	           if (null != fichero)
+	              fichero.close();
+	           } catch (Exception e2) {
+	              e2.printStackTrace();
+	           }
+	        }
+		
+	}
+	public String[] leerTextArea(JEditorPane editorPane) {
+		String[] lines = editorPane.getText().split("\\n");
+		return lines;
 	}
 }
