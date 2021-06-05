@@ -7,17 +7,25 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.BitSet;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import javax.xml.stream.util.EventReaderDelegate;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
@@ -25,19 +33,19 @@ import com.miorganizacion.simple.interprete.SimpleCustomVisitor;
 import com.miorganizacion.simple.interprete.SimpleLexer;
 import com.miorganizacion.simple.interprete.SimpleParser;
 
-import controlador.Coordinador;
+import controlador.Coordinador2;
 
-public class Logica {
+public class Logica2 {
 	Object tempo;
 	Object octava;
 	Object alteracion;
 	Object instrumento;
 	String[] args;
 	String path;
-	Coordinador coordinador;
+	Coordinador2 coordinador;
 	private static final String EXTENSION = "smp";
 	
-	public Logica(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path)
+	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path)
 	{
 		this.tempo = tempo;
 		this.octava = octava;
@@ -198,20 +206,56 @@ public class Logica {
 		return negra;
 	}
 
-	public void setCoordinador(Coordinador coordinador) {
+	public void setCoordinador(Coordinador2 coordinador) {
 		this.coordinador = coordinador;
 		
 	}
 
-	public void play() throws IOException {
-		
+	public void play(JTextPane textAlerta) throws IOException {
+		textAlerta.setText("");
 		String program = args.length > 1 ? args[1] : "test/test." + EXTENSION;
 		System.out.println("Interpreting file " + program);
 
 		SimpleLexer lexer = new SimpleLexer(new ANTLRFileStream(program));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		SimpleParser parser = new SimpleParser(tokens);
-
+ANTLRErrorListener listener = new ANTLRErrorListener() {
+			
+			@Override
+			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+					String msg, RecognitionException e) {
+				textAlerta.setText("");
+				StyledDocument document = (StyledDocument) textAlerta.getDocument();
+			     try {
+					document.insertString(document.getLength(), "linea:" + line + " "+ msg, null);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
+					ATNConfigSet configs) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex,
+					BitSet conflictingAlts, ATNConfigSet configs) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact,
+					BitSet ambigAlts, ATNConfigSet configs) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		parser.addErrorListener(listener);
 		SimpleParser.ProgramContext tree = parser.program();
 
 		SimpleCustomVisitor visitor = new SimpleCustomVisitor();
@@ -270,5 +314,29 @@ public class Logica {
 	public String[] leerTextArea(JEditorPane editorPane) {
 		String[] lines = editorPane.getText().split("\\n");
 		return lines;
+	}
+	public void guardarArchivo(JTextPane textPane) {
+		
+		String[] lines = this.leerTextArea(textPane);
+		this.crearArchivo(lines, "test/test.smp");
+		JFileChooser seleccion = new JFileChooser();
+		seleccion.setDialogTitle("GUARDAR");
+		seleccion.setDialogType(JFileChooser.SAVE_DIALOG);
+		//seleccion.showOpenDialog(textPane);
+		int respuesta = seleccion.showSaveDialog(textPane); // Se apertura la ventana.
+		String path = seleccion.getSelectedFile().getAbsolutePath();
+		this.crearArchivo(lines, path);
+	    switch(respuesta){ // segun la opcion del usuario se ejecutan los algoritmos de interes
+	        case JFileChooser.APPROVE_OPTION:
+	          System.out.println("Guardar");
+	          break;
+	        case JFileChooser.CANCEL_OPTION:
+	          System.out.println("Cancelado");
+	          break;
+	        default :
+	          System.out.println("Error");
+	          break;
+	    }
+		
 	}
 }

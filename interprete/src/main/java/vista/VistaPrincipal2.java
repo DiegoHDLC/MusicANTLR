@@ -2,12 +2,13 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.Coordinador;
+import controlador.Coordinador2;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -19,10 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JEditorPane;
 import javax.swing.JTextPane;
 
-public class VistaPrincipal extends JFrame {
+public class VistaPrincipal2 extends JFrame {
 
 	private JPanel contentPane;
-	Coordinador coordinador;
+	Coordinador2 coordinador;
 
 
 	/**
@@ -32,7 +33,7 @@ public class VistaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VistaPrincipal frame = new VistaPrincipal();
+					VistaPrincipal2 frame = new VistaPrincipal2();
 					
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
@@ -49,19 +50,20 @@ public class VistaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VistaPrincipal() {
+	public VistaPrincipal2() {
 		initComponent();
 	}
 	public void initComponent() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 685, 517);
+		setBounds(100, 100, 313, 613);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(29, 98, 289, 371);
+		scrollPane.setBounds(10, 68, 172, 371);
 		contentPane.add(scrollPane);
+		setLocationRelativeTo(null);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setText("tempo;60\r\ninstrumento;PIANO\r\n{\r\nC;4;#;blanca\r\n}");
@@ -71,6 +73,13 @@ public class VistaPrincipal extends JFrame {
 		textAreaAux.setVisible(false);
 		contentPane.add(textAreaAux);
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 498, 282, 67);
+		contentPane.add(scrollPane_1);
+		JTextPane textAlerta = new JTextPane();
+		textAlerta.setFont(new Font("Segoe UI Semibold", Font.BOLD, 13));
+		scrollPane_1.setViewportView(textAlerta);
+		
 		
 		JButton btnNewButton = new JButton("Play");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -78,7 +87,7 @@ public class VistaPrincipal extends JFrame {
 				new Thread() {
 					public void run() {
 						try {
-							coordinador.play(textPane);
+							coordinador.play(textPane, textAlerta);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -90,7 +99,7 @@ public class VistaPrincipal extends JFrame {
 		}
 			
 		});
-		btnNewButton.setBounds(399, 100, 100, 46);
+		btnNewButton.setBounds(192, 68, 100, 46);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Agregar");
@@ -100,7 +109,7 @@ public class VistaPrincipal extends JFrame {
 				
 			}
 		});
-		btnNewButton_1.setBounds(399, 173, 100, 46);
+		btnNewButton_1.setBounds(192, 125, 100, 46);
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Guardar");
@@ -109,7 +118,7 @@ public class VistaPrincipal extends JFrame {
 				coordinador.guardarArchivo(textPane);
 			}
 		});
-		btnNewButton_2.setBounds(399, 246, 100, 46);
+		btnNewButton_2.setBounds(192, 182, 100, 46);
 		contentPane.add(btnNewButton_2);
 		
 		
@@ -117,7 +126,7 @@ public class VistaPrincipal extends JFrame {
 		
 	}
 
-	public void setCoordinador(Coordinador coordinador) {
+	public void setCoordinador(Coordinador2 coordinador) {
 		this.coordinador = coordinador;
 		
 	}

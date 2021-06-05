@@ -7,8 +7,8 @@ grammar Simple;
 	
 }
 @parser::members{
-	Logica logica = new Logica(0,"","","",null,"");
-	Coordinador coordinador = new Coordinador();
+	Logica2 logica = new Logica2(0,"","","",null,"");
+	Coordinador2 coordinador = new Coordinador2();
 }
 program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 

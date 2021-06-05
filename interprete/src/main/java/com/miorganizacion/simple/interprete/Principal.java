@@ -9,10 +9,10 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jfugue.player.Player;
 
-import controlador.Coordinador;
-import logica.Logica;
+import controlador.Coordinador2;
+import logica.Logica2;
 import logica.NotasMusicales;
-import vista.VistaPrincipal;
+import vista.VistaPrincipal2;
 
 public class Principal {
 	
@@ -35,13 +35,13 @@ public class Principal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Coordinador coordinador = new Coordinador();
-		Logica logica = new Logica("","","","", null,"");
+		Coordinador2 coordinador = new Coordinador2();
+		Logica2 logica = new Logica2("","","","", null,"");
 		Player player = new Player();
 		NotasMusicales nota = new NotasMusicales(player,"I[FLUTE] "+"C"+""+"0"+"/" + 0.5);
 		nota.start();
 		logica.setArgs(args);
-		VistaPrincipal vistaPrincipal = new VistaPrincipal();
+		VistaPrincipal2 vistaPrincipal = new VistaPrincipal2();
 		
 		vistaPrincipal.setCoordinador(coordinador);
 		logica.setCoordinador(coordinador);
