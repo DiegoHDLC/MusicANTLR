@@ -16,7 +16,7 @@ import vista.VistaPrincipal2;
 
 public class Coordinador2 {
 	VistaPrincipal2 vistaPrincipal = new VistaPrincipal2();
-	Logica2 logica = new Logica2(0, 0, 0, 0,null,"");
+	Logica2 logica = new Logica2(0, 0, 0, 0,null,"", 0);
 	Principal main = new Principal();
 
 	public void setVistaPrincipal(VistaPrincipal2 vistaPrincipal) {
@@ -29,6 +29,7 @@ public class Coordinador2 {
 	
 	public void play(JTextPane textPane, JTextPane textAlerta) throws IOException {
 		String[] lines = logica.leerTextArea(textPane);
+		
 		logica.crearArchivo(lines, "test/test.smp");
 		logica.play(textAlerta);
 	}

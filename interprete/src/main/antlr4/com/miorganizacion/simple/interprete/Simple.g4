@@ -7,7 +7,7 @@ grammar Simple;
 	
 }
 @parser::members{
-	Logica2 logica = new Logica2(0,"","","",null,"");
+	Logica2 logica = new Logica2(0,"","","",null,"", 0);
 	Coordinador2 coordinador = new Coordinador2();
 }
 program returns [Object tv, Object ins]:
@@ -34,6 +34,10 @@ n1 = nota
 	SEMICOLON NOMBRE_FIG
 	{
 		logica.testeo($n, $NOMBRE_FIG.text);
+		int numLinea = logica.getNumLinea();
+		numLinea++;
+		logica.setNumLinea(numLinea);
+		System.out.println(numLinea);
 	}
 	;
 		

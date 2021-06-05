@@ -42,10 +42,12 @@ public class Logica2 {
 	Object instrumento;
 	String[] args;
 	String path;
+	int numLinea;
 	Coordinador2 coordinador;
+	int contador = 3;
 	private static final String EXTENSION = "smp";
 	
-	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path)
+	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path, int numLinea)
 	{
 		this.tempo = tempo;
 		this.octava = octava;
@@ -53,7 +55,16 @@ public class Logica2 {
 		this.instrumento = instrumento;
 		this.args = args;
 		this.path = path;
+		this.numLinea = numLinea;
 		
+	}
+	
+	public int getNumLinea() {
+		return numLinea;
+	}
+	
+	public void setNumLinea(int numLinea) {
+		this.numLinea = numLinea;
 	}
 	public String getPath() {
 		return path;
@@ -112,6 +123,7 @@ public class Logica2 {
 		Object alteracionFinal = determinarAlteracion(this.getAlteracion());
 		Object instrumentoFinal = determinarInstrumento(this.getInstrumento());
 		System.out.println(alteracionFinal);
+		
 		//System.out.println(octavaFinal);
 		NotasMusicales nota = new NotasMusicales(player,"I["+this.getInstrumento().toString()+"] "+notaFinal.toString()+alteracionFinal+octavaFinal+"/" + tiempoNota);
 		nota.start();
@@ -215,18 +227,20 @@ public class Logica2 {
 		textAlerta.setText("");
 		String program = args.length > 1 ? args[1] : "test/test." + EXTENSION;
 		System.out.println("Interpreting file " + program);
-
+		
 		SimpleLexer lexer = new SimpleLexer(new ANTLRFileStream(program));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		SimpleParser parser = new SimpleParser(tokens);
-ANTLRErrorListener listener = new ANTLRErrorListener() {
+		ANTLRErrorListener listener = new ANTLRErrorListener() {
 			
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
 					String msg, RecognitionException e) {
 				textAlerta.setText("");
+				
 				StyledDocument document = (StyledDocument) textAlerta.getDocument();
 			     try {
+			    	 
 					document.insertString(document.getLength(), "linea:" + line + " "+ msg, null);
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block

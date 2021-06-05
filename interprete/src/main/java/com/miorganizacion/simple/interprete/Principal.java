@@ -36,7 +36,7 @@ public class Principal {
 			e.printStackTrace();
 		}
 		Coordinador2 coordinador = new Coordinador2();
-		Logica2 logica = new Logica2("","","","", null,"");
+		Logica2 logica = new Logica2("","","","", null,"", 0);
 		Player player = new Player();
 		NotasMusicales nota = new NotasMusicales(player,"I[FLUTE] "+"C"+""+"0"+"/" + 0.5);
 		nota.start();
