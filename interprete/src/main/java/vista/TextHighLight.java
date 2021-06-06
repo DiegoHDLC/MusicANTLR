@@ -58,6 +58,8 @@ public class TextHighLight
 	                    {
 	                        int startIndex = tarea.getLineStartOffset(lineNumber);
 	                        int endIndex = tarea.getLineEndOffset(lineNumber);
+	                        System.out.println("start Index: "+startIndex);
+	                        System.out.println("end Index: "+endIndex);
 	                        String colour = (String) cbox.getSelectedItem();
 	
 	                        if (colour == colourNames[0])

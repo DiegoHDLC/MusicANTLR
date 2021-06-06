@@ -4,11 +4,17 @@ grammar Simple;
 @parser::header{
 	import logica.*;
 	import controlador.*;
+	import javax.swing.JTextPane;
+	import java.awt.*;
+	import java.awt.event.*;
+	import javax.swing.*;
+	import javax.swing.text.*;
 	
 }
 @parser::members{
 	Logica2 logica = new Logica2(0,"","","",null,"", 0);
-	Coordinador2 coordinador = new Coordinador2();
+	Coordinador2 coordinador = new Coordinador2(null);
+	private Highlighter.HighlightPainter painter;
 }
 program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 
@@ -33,11 +39,17 @@ n1 = nota
 	}
 	SEMICOLON NOMBRE_FIG
 	{
-		logica.testeo($n, $NOMBRE_FIG.text);
 		int numLinea = logica.getNumLinea();
 		numLinea++;
-		logica.setNumLinea(numLinea);
-		System.out.println(numLinea);
+		JTextArea textArea = new JTextArea();
+		//JTextArea textArea = coordinador.getTextPane();
+		//coordinador.setTextPane(textArea);
+		logica.testeo($n, $NOMBRE_FIG.text, textArea, numLinea);
+		
+		
+		//logica.setNumLinea(numLinea);
+		//System.out.println(numLinea);
+		
 	}
 	;
 		

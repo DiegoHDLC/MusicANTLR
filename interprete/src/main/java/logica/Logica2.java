@@ -14,8 +14,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
 import javax.xml.stream.util.EventReaderDelegate;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -28,6 +26,10 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.text.*;
 
 import com.miorganizacion.simple.interprete.SimpleCustomVisitor;
 import com.miorganizacion.simple.interprete.SimpleLexer;
@@ -46,6 +48,7 @@ public class Logica2 {
 	Coordinador2 coordinador;
 	int contador = 3;
 	private static final String EXTENSION = "smp";
+	private Highlighter.HighlightPainter painter;
 	
 	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path, int numLinea)
 	{
@@ -110,8 +113,19 @@ public class Logica2 {
 		this.instrumento = instrumento;
 	}
 	
-	public void testeo(Object notaExtraida, Object nombreFig) {
+	public void testeo(Object notaExtraida, Object nombreFig, JTextArea textArea, int numLinea) {
 		Pattern pattern = new Pattern();
+		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+        
+       // try {
+        	//int startIndex = coordinador.getTextPane().getLineStartOffset(numLinea);
+            //int endIndex = coordinador.getTextPane().getLineEndOffset(numLinea);
+            //painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+           //coordinador.getTextPane().getHighlighter().addHighlight(startIndex, endIndex, painter);
+		//} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+		//	e1.printStackTrace();
+		//}
 		
 		Player player = new Player();
 		
@@ -277,19 +291,32 @@ public class Logica2 {
 		
 	}
 
-	public void leerArchivo(JPanel contentPane, JTextPane textPane ) {
+	public void leerArchivo(JPanel contentPane, JTextArea textArea ) {
+		
 		JFileChooser jf = new JFileChooser();
 		jf.showOpenDialog(contentPane);
 		File archivo = jf.getSelectedFile();
 		String path = archivo.getAbsolutePath();
-		textPane.setText("");
+		textArea.setText("");
 		this.setPath(path);
+		try {
+		 FileReader reader = new FileReader( this.getPath() );
+         BufferedReader br = new BufferedReader(reader);
+         textArea.read( br, null );
+         br.close();
+         textArea.requestFocus();
+	 }
+    catch(Exception e2) { System.out.println(e2); }
+}
+		
+		
+		/*
 		try {
 			BufferedReader leer = new BufferedReader(new FileReader(archivo));
 			String linea = leer.readLine();
-			StyledDocument doc = textPane.getStyledDocument();
+			//StyledDocument doc = textPane.get
 			while(linea!=null) {
-				doc.insertString(doc.getLength(), linea+"\n", null);
+				//doc.insertString(doc.getLength(), linea+"\n", null);
 				linea = leer.readLine();
 			}
 		} catch (Exception e) {
@@ -297,8 +324,8 @@ public class Logica2 {
 			e.printStackTrace();
 		}
 		System.out.println(path);
-		
-	}
+		*/
+	
 	public void crearArchivo(String[] lines, String path) {
 		 FileWriter fichero = null;
 	        PrintWriter pw = null;
@@ -325,11 +352,11 @@ public class Logica2 {
 	        }
 		
 	}
-	public String[] leerTextArea(JEditorPane editorPane) {
+	public String[] leerTextArea(JTextArea editorPane) {
 		String[] lines = editorPane.getText().split("\\n");
 		return lines;
 	}
-	public void guardarArchivo(JTextPane textPane) {
+	public void guardarArchivo(JTextArea textPane) {
 		
 		String[] lines = this.leerTextArea(textPane);
 		this.crearArchivo(lines, "test/test.smp");

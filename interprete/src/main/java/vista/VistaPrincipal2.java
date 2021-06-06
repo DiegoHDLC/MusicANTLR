@@ -65,9 +65,10 @@ public class VistaPrincipal2 extends JFrame {
 		contentPane.add(scrollPane);
 		setLocationRelativeTo(null);
 		
-		JTextPane textPane = new JTextPane();
+		JTextArea textPane = new JTextArea();
 		textPane.setText("tempo;60\r\ninstrumento;PIANO\r\n{\r\nC;4;#;blanca\r\n}");
 		scrollPane.setViewportView(textPane);
+		//coordinador.setTextPane(textPane);
 		JTextArea textAreaAux = new JTextArea();
 		textAreaAux.setBounds(217, 11, 40, 22);
 		textAreaAux.setVisible(false);
@@ -87,6 +88,7 @@ public class VistaPrincipal2 extends JFrame {
 				new Thread() {
 					public void run() {
 						try {
+							
 							coordinador.play(textPane, textAlerta);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
