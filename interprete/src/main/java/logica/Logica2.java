@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.BitSet;
 
 import javax.swing.JEditorPane;
@@ -36,21 +37,32 @@ import com.miorganizacion.simple.interprete.SimpleLexer;
 import com.miorganizacion.simple.interprete.SimpleParser;
 
 import controlador.Coordinador2;
+import jm.JMC;
+import jm.music.data.Note;
+import jm.music.data.Part;
+import jm.music.data.Phrase;
+import jm.music.data.Score;
+import jm.util.View;
+import vista.VistaPrincipal2;
 
-public class Logica2 {
+public class Logica2 implements JMC {
 	Object tempo;
 	Object octava;
 	Object alteracion;
 	Object instrumento;
 	String[] args;
 	String path;
-	int numLinea;
+	public static int numLinea;
 	Coordinador2 coordinador;
-	int contador = 3;
+	public static Phrase phr = new Phrase();
+	
+	int contador = 0;
 	private static final String EXTENSION = "smp";
 	private Highlighter.HighlightPainter painter;
 	
-	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path, int numLinea)
+
+	
+	public Logica2(Object tempo, Object octava, Object alteracion, Object instrumento, String[] args, String path)
 	{
 		this.tempo = tempo;
 		this.octava = octava;
@@ -58,17 +70,9 @@ public class Logica2 {
 		this.instrumento = instrumento;
 		this.args = args;
 		this.path = path;
-		this.numLinea = numLinea;
 		
 	}
 	
-	public int getNumLinea() {
-		return numLinea;
-	}
-	
-	public void setNumLinea(int numLinea) {
-		this.numLinea = numLinea;
-	}
 	public String getPath() {
 		return path;
 	}
@@ -113,71 +117,173 @@ public class Logica2 {
 		this.instrumento = instrumento;
 	}
 	
-	public void testeo(Object notaExtraida, Object nombreFig, JTextArea textArea, int numLinea) {
-		Pattern pattern = new Pattern();
-		painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
-        
-       // try {
-        	//int startIndex = coordinador.getTextPane().getLineStartOffset(numLinea);
-            //int endIndex = coordinador.getTextPane().getLineEndOffset(numLinea);
-            //painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
-           //coordinador.getTextPane().getHighlighter().addHighlight(startIndex, endIndex, painter);
-		//} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
-		//	e1.printStackTrace();
-		//}
+	public void testeo(Object notaExtraida, Object nombreFig) {
+		
 		
 		Player player = new Player();
-		
 		float t = Float.parseFloat(tempo.toString());
-		//System.out.println(t);
 		Object tiempoNota = determinarTiempo(nombreFig, t);
 		Object notaFinal = determinarNota(notaExtraida);
 		Object octavaFinal = determinarOctava(this.getOctava());
 		Object alteracionFinal = determinarAlteracion(this.getAlteracion());
-		Object instrumentoFinal = determinarInstrumento(this.getInstrumento());
-		System.out.println(alteracionFinal);
+		System.out.println("Alteracion Final Test: "+ alteracionFinal);
+		int notaMIDI = obtenerMIDI(notaFinal, octavaFinal, this.getAlteracion());
+		double tipoNota = determinarTipoNota(nombreFig);
+		Note n = new Note(notaMIDI, tipoNota);
 		
-		//System.out.println(octavaFinal);
+        phr.addNote(n);
+ 
 		NotasMusicales nota = new NotasMusicales(player,"I["+this.getInstrumento().toString()+"] "+notaFinal.toString()+alteracionFinal+octavaFinal+"/" + tiempoNota);
 		nota.start();
 		float test = Float.parseFloat(tiempoNota.toString());
 		float test1 = test*1000;
+		contador++;
+		int n2 = numLinea - 4;
+		System.out.println("contador: "+ contador);
+		System.out.println("numLinea:"+ n2);
+	
 		
-		//System.out.println((long)test1);
 		System.out.println(notaExtraida);
 		try {
+			int lineNumber = contador +2;
+			int startIndex = VistaPrincipal2.textPane.getLineStartOffset(lineNumber);
+			 int endIndex = VistaPrincipal2.textPane.getLineEndOffset(lineNumber);
+			 painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+			 VistaPrincipal2.textPane.getHighlighter().addHighlight(startIndex, endIndex, painter);
 			Thread.sleep((long)test1);
-			
+			VistaPrincipal2.textPane.getHighlighter().removeAllHighlights();
+			VistaPrincipal2.notaLabel.setText("-");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	
+			
+	
+        
 	}
 
-	private Object determinarInstrumento(Object instrumento2) {
-		// TODO Auto-generated method stub
-		return null;
+	private double determinarTipoNota(Object nombreFig) {
+			switch(nombreFig.toString()) {
+			case "negra": return QUARTER_NOTE;
+			case "blanca": return MINIM;
+			case "redonda": return SEMIBREVE;
+			case "corchea": return QUAVER;
+			case "semicorchea": return SEMI_QUAVER;
+			}
+		return 0;
 	}
+
+	private int obtenerMIDI(Object notaFinal, Object octavaFinal, Object alteracionFinal) {
+		int[] columnaC = {0,12,24,36,48,60,72,84,96,108,120};
+		int[] columnaCSost = {1,13,25,37,49,61,73,85,97,109,121};
+		int[] columnaD = {2,14,26,38,50,62,74,86,98,110,122};
+		int[] columnaDSost = {3,15,27,39,51,63,75,87,99,111,123};
+		int[] columnaE = {4,16,28,40,52,64,76,88,100,112,124};
+		int[] columnaF = {5,17,29,41,53,65,77,89,101,113,125};
+		int[] columnaFSost = {6,18,30,42,54,66,78,90,102,114,126};
+		int[] columnaG = {7,19,31,43,55,67,79,91,103,115,127};
+		int[] columnaGSost = {8,20,32,44,56,68,80,92,104,116};
+		int[] columnaA = {9,21,33,45,57,69,81,93,105,117};
+		int[] columnaASost = {10,22,34,46,58,70,82,94,106,118};
+		int[] columnaB = {11,23,35,47,59,71,83,95,106,119};
+		byte[] nota = notaFinal.toString().getBytes(StandardCharsets.US_ASCII);
+		
+		byte[] alteracion = alteracionFinal.toString().getBytes(StandardCharsets.US_ASCII);
+		
+		
+		System.out.println("alteracion normal: "+ alteracionFinal);
+		System.out.println("Nota final: " + nota[0]);
+		System.out.println("Alteracion Final: " + alteracion[0]);
+		if(nota[0] == 67) {// C
+			if(alteracion[0] == 35) { //#
+				return columnaCSost[Integer.parseInt(octavaFinal.toString())];
+			}
+			if(alteracion[0] == 45) { // " "
+				return columnaC[4];
+			}
+			//if(alteracion[0] == )
+		}
+		if(nota[0] == 68) {// D
+			if(alteracion[0] == 35) { //#
+				return columnaDSost[Integer.parseInt(octavaFinal.toString())];
+			}
+			if(alteracion[0] == 45) { // " "
+				return columnaD[4];
+			}
+
+		}
+		if(nota[0] == 69) {// E
+		
+			if(alteracion[0] == 45) { // " "
+				return columnaE[4];
+			}
+
+		}
+		if(nota[0] == 70) {// F
+			if(alteracion[0] == 35) { //#
+				return columnaFSost[Integer.parseInt(octavaFinal.toString())];
+			}
+			if(alteracion[0] == 45) { // " "
+				return columnaF[4];
+			}
+
+		}
+		if(nota[0] == 71) {// G
+			if(alteracion[0] == 35) { //#
+				return columnaGSost[Integer.parseInt(octavaFinal.toString())];
+			}
+			if(alteracion[0] == 45) { // " "
+				return columnaG[4];
+			}
+		}
+		if(nota[0] == 65) {// A
+			if(alteracion[0] == 35) { //#
+				return columnaASost[Integer.parseInt(octavaFinal.toString())];
+			}
+			if(alteracion[0] == 45) { // " "
+				return columnaA[4];
+			}
+
+		}
+		if(nota[0] == 66) {// B
+			
+			if(alteracion[0] == 32) { // " "
+				return columnaB[4];
+			}
+		}
+		return 0;
+	}
+
 
 	private Object determinarAlteracion(Object alteracion) {
-		if(alteracion == "-") {
-			return " ";
+		byte[] alt = alteracion.toString().getBytes(StandardCharsets.US_ASCII);
+		if(alt[0] == 45) {
+			return "";
 		}
 		return alteracion;
 	}
 
 	private Object determinarOctava(Object octava) {
-		if(octava == "-") {
-			return " ";
+		byte[] oct = octava.toString().getBytes(StandardCharsets.US_ASCII);
+		if(oct[0] == 45) {
+			return 4;
 		}
+		/*
+		if(octava == "-") {
+			return 4;
+		}
+		*/
 		return octava;
 	}
 
 	private Object determinarNota(Object notaExtraida) {
 		switch((String)notaExtraida) {
 		case "C":
-		case ("DO"):
+		case "DO":
 			return "C";
 		case "D":
 		case "RE":
@@ -236,7 +342,7 @@ public class Logica2 {
 		this.coordinador = coordinador;
 		
 	}
-
+	
 	public void play(JTextPane textAlerta) throws IOException {
 		textAlerta.setText("");
 		String program = args.length > 1 ? args[1] : "test/test." + EXTENSION;
@@ -287,6 +393,7 @@ public class Logica2 {
 		SimpleParser.ProgramContext tree = parser.program();
 
 		SimpleCustomVisitor visitor = new SimpleCustomVisitor();
+		
 		visitor.visit(tree);
 		
 	}
@@ -309,22 +416,6 @@ public class Logica2 {
     catch(Exception e2) { System.out.println(e2); }
 }
 		
-		
-		/*
-		try {
-			BufferedReader leer = new BufferedReader(new FileReader(archivo));
-			String linea = leer.readLine();
-			//StyledDocument doc = textPane.get
-			while(linea!=null) {
-				//doc.insertString(doc.getLength(), linea+"\n", null);
-				linea = leer.readLine();
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(path);
-		*/
 	
 	public void crearArchivo(String[] lines, String path) {
 		 FileWriter fichero = null;
@@ -336,7 +427,6 @@ public class Logica2 {
 
 	            for (int i = 0; i < lines.length; i++)
 	            	pw.println(lines[i]);
-	                
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -378,6 +468,6 @@ public class Logica2 {
 	          System.out.println("Error");
 	          break;
 	    }
-		
 	}
+	
 }

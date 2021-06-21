@@ -4,18 +4,27 @@ grammar Simple;
 @parser::header{
 	import logica.*;
 	import controlador.*;
+	import vista.*;
 	import javax.swing.JTextPane;
 	import java.awt.*;
 	import java.awt.event.*;
 	import javax.swing.*;
 	import javax.swing.text.*;
+	import javax.swing.border.EmptyBorder;
 	
 }
 @parser::members{
-	Logica2 logica = new Logica2(0,"","","",null,"", 0);
+	Logica2 logica = new Logica2(0,"","","",null,"");
 	Coordinador2 coordinador = new Coordinador2(null);
 	private Highlighter.HighlightPainter painter;
+	int numLinea = 0;
+	
 }
+	
+	
+	
+
+
 program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 
 	tv1 = tempoValor{
@@ -39,12 +48,13 @@ n1 = nota
 	}
 	SEMICOLON NOMBRE_FIG
 	{
-		int numLinea = logica.getNumLinea();
+		
+		
 		numLinea++;
-		JTextArea textArea = new JTextArea();
-		//JTextArea textArea = coordinador.getTextPane();
-		//coordinador.setTextPane(textArea);
-		logica.testeo($n, $NOMBRE_FIG.text, textArea, numLinea);
+		//System.out.println(vista.textArea);
+		//coordinador.setTextArea(vista.textArea);
+		VistaPrincipal2.notaLabel.setText($n.toString());
+		logica.testeo($n, $NOMBRE_FIG.text);
 		
 		
 		//logica.setNumLinea(numLinea);
@@ -66,18 +76,14 @@ nota returns [Object n, Object oct, Object alt]:
 		$oct = $oct1.oct;
 		logica.setOctava($oct);
 	}|NULO{
-		logica.setAlteracion("");
+		logica.setAlteracion("-");
 	}) 
 	SEMICOLON 
 	(alt1 = alteracion{
 		$alt = $alt1.alt;
-		
-		
 			logica.setAlteracion($alt);
-		
-		
 	} |NULO{
-		logica.setAlteracion("");
+		logica.setAlteracion("-");
 	}) ;
 	
 octava returns [Object oct]:
