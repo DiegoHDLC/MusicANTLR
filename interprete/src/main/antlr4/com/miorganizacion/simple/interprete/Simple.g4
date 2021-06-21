@@ -51,8 +51,6 @@ n1 = nota
 		
 		
 		numLinea++;
-		//System.out.println(vista.textArea);
-		//coordinador.setTextArea(vista.textArea);
 		VistaPrincipal2.notaLabel.setText($n.toString());
 		logica.testeo($n, $NOMBRE_FIG.text);
 		

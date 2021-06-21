@@ -10,6 +10,7 @@ import javax.script.ScriptException;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 
@@ -52,6 +53,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.Toolkit;
+import java.awt.SystemColor;
 
 public class VistaPrincipal2 extends JFrame implements JMC{
 
@@ -100,6 +103,8 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 	 * Create the frame.
 	 */
 	public VistaPrincipal2() {
+		setBackground(SystemColor.textHighlight);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\di_eg\\Desktop\\Libreria Notas Musicales\\55431-200.png"));
 		setTitle("MusicANTLR");
 		initComponent();
 		//textTest.setText(coordinador.contarNumLinea(textPane));
@@ -108,8 +113,9 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 
 	public void initComponent() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 313, 613);
+		setBounds(100, 100, 335, 613);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(242, 96, 82));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -120,7 +126,8 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 		setLocationRelativeTo(null);
 		
 		textPane = new JTextArea();
-		textPane.setFont(new Font("Monospaced", Font.PLAIN, 13));
+		textPane.setBackground(new Color(242,242,242));
+		textPane.setFont(new Font("Monospaced", Font.BOLD, 13));
 		
 		
 		textPane.setText("tempo;60\r\ninstrumento;PIANO\r\n{\r\nC;4;#;blanca\r\n}");
@@ -132,14 +139,16 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 		contentPane.add(textAreaAux);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 498, 282, 67);
+		scrollPane_1.setBounds(10, 498, 299, 67);
 		contentPane.add(scrollPane_1);
 		JTextPane textAlerta = new JTextPane();
+		textAlerta.setBackground(new Color(242,242,242));
 		textAlerta.setFont(new Font("Segoe UI Semibold", Font.BOLD, 13));
 		scrollPane_1.setViewportView(textAlerta);
 		
 		
-		JButton btnNewButton = new JButton("Play");
+		JButton btnNewButton = new JButton("Reproducir");
+		btnNewButton.setBackground(new Color(242,242,242));
 		btnNewButton.setFont(new Font("Monospaced", Font.BOLD, 11));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -162,10 +171,11 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 		}
 			
 		});
-		btnNewButton.setBounds(192, 68, 100, 46);
+		btnNewButton.setBounds(192, 68, 117, 46);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Agregar");
+		btnNewButton_1.setBackground(new Color(242,242,242));
 		btnNewButton_1.setFont(new Font("Monospaced", Font.BOLD, 11));
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,21 +183,23 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 				
 			}
 		});
-		btnNewButton_1.setBounds(192, 125, 100, 46);
+		btnNewButton_1.setBounds(192, 125, 117, 46);
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Guardar");
+		btnNewButton_2.setBackground(new Color(242,242,242));
 		btnNewButton_2.setFont(new Font("Monospaced", Font.BOLD, 11));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coordinador.guardarArchivo(textPane);
 			}
 		});
-		btnNewButton_2.setBounds(192, 182, 100, 46);
+		btnNewButton_2.setBounds(192, 182, 117, 46);
 		contentPane.add(btnNewButton_2);
 		
 		
-		JButton generarPartitura = new JButton("Generar");
+		JButton generarPartitura = new JButton("Partitura");
+		generarPartitura.setBackground(new Color(242,242,242));
 		generarPartitura.setFont(new Font("Monospaced", Font.BOLD, 11));
 		generarPartitura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -195,32 +207,37 @@ public class VistaPrincipal2 extends JFrame implements JMC{
 				        View.notate(Logica2.phr);			      
 				    }	
 		});
-		generarPartitura.setBounds(192, 239, 100, 46);
+		generarPartitura.setBounds(192, 239, 117, 46);
 		contentPane.add(generarPartitura);
 		
 		JLabel titulo = new JLabel("MusicANTLR");
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
-		titulo.setFont(new Font("Monospaced", Font.BOLD, 17));
-		titulo.setBounds(0, 11, 299, 31);
+		titulo.setFont(new Font("Monospaced", Font.BOLD, 25));
+		titulo.setBounds(0, 11, 321, 46);
 		contentPane.add(titulo);
 		
 		notaLabel = new JLabel("-");
 		notaLabel.setFont(new Font("Monospaced", Font.BOLD, 35));
 		notaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		notaLabel.setBounds(192, 349, 100, 77);
+		notaLabel.setBounds(192, 349, 117, 77);
 		contentPane.add(notaLabel);
 		
 		JLabel labelNota = new JLabel("Nota");
 		labelNota.setFont(new Font("Monospaced", Font.BOLD, 18));
 		labelNota.setHorizontalAlignment(SwingConstants.CENTER);
-		labelNota.setBounds(192, 324, 97, 14);
+		labelNota.setBounds(192, 324, 117, 14);
 		contentPane.add(labelNota);
 		
 		JTextArea textPane_1 = new JTextArea();
-		textPane_1.setBounds(192, 296, 97, 141);
+		textPane_1.setBackground(new Color(242,242,242));
+		textPane_1.setBounds(192, 296, 117, 141);
 		contentPane.add(textPane_1);
 		
-
+		JLabel lblErrores = new JLabel("Detalles");
+		lblErrores.setHorizontalAlignment(SwingConstants.CENTER);
+		lblErrores.setFont(new Font("Monospaced", Font.BOLD, 25));
+		lblErrores.setBounds(10, 452, 301, 46);
+		contentPane.add(lblErrores);
 	}
 
 	public void setCoordinador(Coordinador2 coordinador) {

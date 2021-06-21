@@ -148,7 +148,7 @@ public class Logica2 implements JMC {
 			int lineNumber = contador +2;
 			int startIndex = VistaPrincipal2.textPane.getLineStartOffset(lineNumber);
 			 int endIndex = VistaPrincipal2.textPane.getLineEndOffset(lineNumber);
-			 painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+			 painter = new DefaultHighlighter.DefaultHighlightPainter( new Color(242, 65, 48));
 			 VistaPrincipal2.textPane.getHighlighter().addHighlight(startIndex, endIndex, painter);
 			Thread.sleep((long)test1);
 			VistaPrincipal2.textPane.getHighlighter().removeAllHighlights();
