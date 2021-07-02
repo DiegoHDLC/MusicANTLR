@@ -198,12 +198,13 @@ public class Logica2 implements JMC {
 		System.out.println("alteracion normal: "+ alteracionFinal);
 		System.out.println("Nota final: " + nota[0]);
 		System.out.println("Alteracion Final: " + alteracion[0]);
+		
 		if(nota[0] == 67) {// C
 			if(alteracion[0] == 35) { //#
 				return columnaCSost[Integer.parseInt(octavaFinal.toString())];
 			}
 			if(alteracion[0] == 45) { // " "
-				return columnaC[4];
+				return columnaC[Integer.parseInt(octavaFinal.toString())];
 			}
 			//if(alteracion[0] == )
 		}
@@ -212,14 +213,14 @@ public class Logica2 implements JMC {
 				return columnaDSost[Integer.parseInt(octavaFinal.toString())];
 			}
 			if(alteracion[0] == 45) { // " "
-				return columnaD[4];
+				return columnaD[Integer.parseInt(octavaFinal.toString())];
 			}
 
 		}
 		if(nota[0] == 69) {// E
 		
 			if(alteracion[0] == 45) { // " "
-				return columnaE[4];
+				return columnaE[Integer.parseInt(octavaFinal.toString())];
 			}
 
 		}
@@ -228,7 +229,7 @@ public class Logica2 implements JMC {
 				return columnaFSost[Integer.parseInt(octavaFinal.toString())];
 			}
 			if(alteracion[0] == 45) { // " "
-				return columnaF[4];
+				return columnaF[Integer.parseInt(octavaFinal.toString())];
 			}
 
 		}
@@ -237,7 +238,7 @@ public class Logica2 implements JMC {
 				return columnaGSost[Integer.parseInt(octavaFinal.toString())];
 			}
 			if(alteracion[0] == 45) { // " "
-				return columnaG[4];
+				return columnaG[Integer.parseInt(octavaFinal.toString())];
 			}
 		}
 		if(nota[0] == 65) {// A
@@ -245,14 +246,14 @@ public class Logica2 implements JMC {
 				return columnaASost[Integer.parseInt(octavaFinal.toString())];
 			}
 			if(alteracion[0] == 45) { // " "
-				return columnaA[4];
+				return columnaA[Integer.parseInt(octavaFinal.toString())];
 			}
 
 		}
 		if(nota[0] == 66) {// B
 			
-			if(alteracion[0] == 32) { // " "
-				return columnaB[4];
+			if(alteracion[0] == 45) { // " "
+				return columnaB[Integer.parseInt(octavaFinal.toString())];
 			}
 		}
 		return 0;

@@ -20,10 +20,6 @@ grammar Simple;
 	int numLinea = 0;
 	
 }
-	
-	
-	
-
 
 program returns [Object tv, Object ins]:
 	TEMPO SEMICOLON 
@@ -48,16 +44,9 @@ n1 = nota
 	}
 	SEMICOLON NOMBRE_FIG
 	{
-		
-		
 		numLinea++;
 		VistaPrincipal2.notaLabel.setText($n.toString());
 		logica.testeo($n, $NOMBRE_FIG.text);
-		
-		
-		//logica.setNumLinea(numLinea);
-		//System.out.println(numLinea);
-		
 	}
 	;
 		
@@ -113,6 +102,7 @@ INSTRUMENTO:
 /*Percusion */|'XYLOPHONE'
 /*Organo */ | 'HARMONICA'
 ;
+
 TEMPO: 'tempo';
 PARTITURA: 'partitura';
 NOMBRE_FIG: 'redonda'|'blanca'|'negra'|'corchea'|'semicorchea'|'fusa'|'semifusa';
@@ -128,16 +118,6 @@ NOTA: 'C'| 'D' | 'E' |'F' |'G'  | 'A'|'B'
 BRACKET_OPEN: '{';
 BRACKET_CLOSE: '}';
 
-PAR_OPEN: '(';
-PAR_CLOSE: ')';
-
-COMILLA: '"';
 SEMICOLON: ';';
-COMA: ',';
-PUNTO: '.';
-
-ID: [a-zA-Z_][A-Za-z0-9_]*;
-
-NUMBER: [0-9]+;
 
 WS: [ \t\n\r]+ -> skip;
