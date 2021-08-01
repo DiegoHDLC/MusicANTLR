@@ -1,4 +1,4 @@
-grammar Simple;
+grammar MusicANTLR;
 
 
 @parser::header{
@@ -16,8 +16,7 @@ grammar Simple;
 @parser::members{
 	Logica2 logica = new Logica2(0,"","","",null,"");
 	Coordinador2 coordinador = new Coordinador2(null);
-	private Highlighter.HighlightPainter painter;
-	int numLinea = 0;
+	
 	
 }
 
@@ -44,16 +43,17 @@ n1 = nota
 	}
 	SEMICOLON NOMBRE_FIG
 	{
-		numLinea++;
+		
 		VistaPrincipal2.notaLabel.setText($n.toString());
-		logica.testeo($n, $NOMBRE_FIG.text);
+		logica.generarNota($n, $NOMBRE_FIG.text);
 	}
 	;
 		
 tempoValor returns [Object tv]:
-	TEMPO_VALOR{
+	TEMPO_VALOR {
 		$tv = $TEMPO_VALOR.text;
-	};
+	}		#tempoValorrr;
+	
 nota returns [Object n, Object oct, Object alt]:
 	NOTA{
 		$n = $NOTA.text;
@@ -63,7 +63,7 @@ nota returns [Object n, Object oct, Object alt]:
 		$oct = $oct1.oct;
 		logica.setOctava($oct);
 	}|NULO{
-		logica.setAlteracion("-");
+		logica.setOctava("-");
 	}) 
 	SEMICOLON 
 	(alt1 = alteracion{
@@ -98,7 +98,6 @@ INSTRUMENTO:
 /*Guitarras */|'GUITAR'|'ELECTRIC_CLEAN_GUITAR'
 /*Bajos */ |'SLAP_BASS_1'|'ACOUSTIC_BASS'
 /*Pianos */ |'PIANO'
-/*Efectos */|'RAIN'|'APPLAUSE'|'GUNSHOT'
 /*Percusion */|'XYLOPHONE'
 /*Organo */ | 'HARMONICA'
 ;

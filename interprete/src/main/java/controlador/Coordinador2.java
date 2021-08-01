@@ -47,7 +47,7 @@ public class Coordinador2 {
 		//Principal.v.textTest.setText("2");
 		
 		this.setTextPane(textPane);
-		logica.crearArchivo(lines, "test/test.smp");
+		logica.crearArchivo(lines, "test/archivo.ma");
 		logica.play(textAlerta);
 		
 	}

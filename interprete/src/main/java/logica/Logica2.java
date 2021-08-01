@@ -32,9 +32,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-import com.miorganizacion.simple.interprete.SimpleCustomVisitor;
-import com.miorganizacion.simple.interprete.SimpleLexer;
-import com.miorganizacion.simple.interprete.SimpleParser;
+import com.miorganizacion.simple.interprete.MusicANTLRCustomVisitor;
+import com.miorganizacion.simple.interprete.MusicANTLRLexer;
+import com.miorganizacion.simple.interprete.MusicANTLRParser;
 
 import controlador.Coordinador2;
 import jm.JMC;
@@ -57,7 +57,7 @@ public class Logica2 implements JMC {
 	public static Phrase phr = new Phrase();
 	
 	int contador = 0;
-	private static final String EXTENSION = "smp";
+	private static final String EXTENSION = "ma";
 	private Highlighter.HighlightPainter painter;
 	
 
@@ -117,7 +117,7 @@ public class Logica2 implements JMC {
 		this.instrumento = instrumento;
 	}
 	
-	public void testeo(Object notaExtraida, Object nombreFig) {
+	public void generarNota(Object notaExtraida, Object nombreFig) {
 		
 		
 		Player player = new Player();
@@ -346,12 +346,12 @@ public class Logica2 implements JMC {
 	
 	public void play(JTextPane textAlerta) throws IOException {
 		textAlerta.setText("");
-		String program = args.length > 1 ? args[1] : "test/test." + EXTENSION;
+		String program = args.length > 1 ? args[1] : "test/archivo." + EXTENSION;
 		System.out.println("Interpreting file " + program);
 		
-		SimpleLexer lexer = new SimpleLexer(new ANTLRFileStream(program));
+		MusicANTLRLexer lexer = new MusicANTLRLexer(new ANTLRFileStream(program));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		SimpleParser parser = new SimpleParser(tokens);
+		MusicANTLRParser parser = new MusicANTLRParser(tokens);
 		ANTLRErrorListener listener = new ANTLRErrorListener() {
 			
 			@Override
@@ -391,9 +391,9 @@ public class Logica2 implements JMC {
 			}
 		};
 		parser.addErrorListener(listener);
-		SimpleParser.ProgramContext tree = parser.program();
+		MusicANTLRParser.ProgramContext tree = parser.program();
 
-		SimpleCustomVisitor visitor = new SimpleCustomVisitor();
+		MusicANTLRCustomVisitor visitor = new MusicANTLRCustomVisitor();
 		
 		visitor.visit(tree);
 		
@@ -450,7 +450,7 @@ public class Logica2 implements JMC {
 	public void guardarArchivo(JTextArea textPane) {
 		
 		String[] lines = this.leerTextArea(textPane);
-		this.crearArchivo(lines, "test/test.smp");
+		this.crearArchivo(lines, "test/archivo.ma");
 		JFileChooser seleccion = new JFileChooser();
 		seleccion.setDialogTitle("GUARDAR");
 		seleccion.setDialogType(JFileChooser.SAVE_DIALOG);

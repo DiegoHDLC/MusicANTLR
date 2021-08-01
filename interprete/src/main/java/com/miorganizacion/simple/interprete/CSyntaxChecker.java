@@ -10,9 +10,9 @@ public class CSyntaxChecker {
 	 public static List<SyntaxError> getSyntaxErrors(String sourceCode)
 	    {
 	        CodePointCharStream inputStream = fromString(sourceCode);
-	        SimpleLexer lexer = new SimpleLexer(inputStream);
+	        MusicANTLRLexer lexer = new MusicANTLRLexer(inputStream);
 	        CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-	        SimpleParser parser = new SimpleParser(commonTokenStream);
+	        MusicANTLRParser parser = new MusicANTLRParser(commonTokenStream);
 	        SyntaxErrorListener listener = new SyntaxErrorListener();
 	        parser.addErrorListener(listener);
 	        

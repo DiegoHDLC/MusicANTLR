@@ -44,7 +44,6 @@ public class Principal {
 		NotasMusicales nota = new NotasMusicales(player,"I[FLUTE] "+"C"+""+"0"+"/" + 0.5);
 		nota.start();
 		logica.setArgs(args);
-		//VistaPrincipal2 vistaPrincipal = new VistaPrincipal2();
 		
 		v.setCoordinador(coordinador);
 		logica.setCoordinador(coordinador);
@@ -52,10 +51,6 @@ public class Principal {
 		coordinador.setVistaPrincipal(v);
 		coordinador.setLogica(logica);
 		v.setVisible(true);
-		
-		
-		
-		
 
 		System.out.println("Interpretation finished");
 
